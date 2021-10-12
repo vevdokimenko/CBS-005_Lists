@@ -13,79 +13,108 @@ package practice.task2;
 * */
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Scanner;
 
 public class Main {
-
-    static void printMenu() {
-        System.out.println("1. Добавить элемент в список;");
-        System.out.println("2. Удалить элемент из списка;");
-        System.out.println("3. Показать содержимое списка;");
-        System.out.println("4. Проверить есть ли значение в списке;");
-        System.out.println("5. Заменить значение в списке.");
-    }
+    private static ArrayList<Integer> list;
+    private static Menu menu = new Menu();
+    private static Reader reader = new Reader();
 
     public static void main(String[] args) {
-        System.out.println("Введите набор чисел через пробел:");
-
-        Scanner sc = new Scanner(System.in);
-        String input = sc.nextLine();
-
-        ArrayList<Integer> inputs = new ArrayList<>();
-        String[] arr = input.split(" ");
-
-        for (String item : arr) {
-            if (item.matches("[-+]?\\d+"))
-                inputs.add(Integer.parseInt(item));
+        while (true) {
+            System.out.println("Введите набор чисел через пробел:");
+            list = reader.getNumbersList();
+            if (list == null)
+                System.out.println("Некорректный ввод\n");
             else
-                System.out.println("Вы ввели не число.");
+                break;
         }
 
         while (true) {
-            printMenu();
-            input = sc.nextLine();
-            if (input.matches("[-+]?\\d+")){
-                switch (Integer.parseInt(input)) {
-                    case 1: {
-                        System.out.println("Введите число: ");
-                        input = sc.nextLine();
-                        inputs.add(Integer.parseInt(input));
-                    }
-                        break;
-                    case 2: {
-                        System.out.println("Введите номер элемента, который нужно удалить: ");
-                        input = sc.nextLine();
-                        int index = Integer.parseInt(input);
-                        inputs.remove(index);
-                    }
-                        break;
-                    case 3: {
-                        System.out.println(inputs);
-                    }
-                        break;
-                    case 4: {
-                        System.out.println("Введите значение, которое хотите проверить: ");
-                        input = sc.nextLine();
-                        System.out.println(inputs.contains(Integer.parseInt(input)));
-                    }
+            menu.print();
+            switch (reader.getMenuItem()) {
+                case "1":
+                    menu1Process();
                     break;
-                    case 5: {
-                        System.out.println("Введите значение, которое хотите заменить: ");
-                        input = sc.nextLine();
-                        if (inputs.contains(Integer.parseInt(input))) {
-                            System.out.println("Введите новое значение: ");
-                            inputs.set(Integer.parseInt(input), Integer.parseInt(sc.nextLine()));
-                        }
-                    }
+                case "2":
+                    menu2Process();
                     break;
-                    default: System.exit(1);
-                }
-            } else {
-                printMenu();
+                case "3":
+                    menu3Process();
+                    break;
+                case "4":
+                    menu4Process();
+                    break;
+                case "5":
+                    menu5Process();
+                    break;
+                default:
+                    System.exit(1);
             }
         }
+    }
 
+    private static void menu1Process() {
+        while (true) {
+            System.out.println("Введите число: ");
+            Integer n = reader.getInteger();
+            if (n == null) {
+                System.out.println("Некорректный ввод!");
+            } else {
+                list.add(n);
+                break;
+            }
+        }
+    }
 
+    private static void menu2Process() {
+        while (true) {
+            System.out.println("Введите элемент, который нужно удалить " + list);
+            Integer el = reader.getInteger();
+            if (el == null) {
+                System.out.println("Некорректный ввод!");
+            } else {
+                list.remove(el);
+                break;
+            }
+        }
+    }
+
+    private static void menu3Process() {
+        System.out.println(list + "\n");
+    }
+
+    private static void menu4Process() {
+        while (true) {
+            System.out.println("Введите значение, которое хотите проверить: ");
+            Integer el = reader.getInteger();
+            if (el == null) {
+                System.out.println("Некорректный ввод!");
+            } else {
+                System.out.println(
+                        (list.contains(el)
+                                ? "Такое значение есть в списке с индексом " + list.indexOf(el) + "\n"
+                                : "Такого значения нет\n"));
+                break;
+            }
+        }
+    }
+    private static void menu5Process() {
+        while (true) {
+            System.out.println("Введите значение, которое хотите заменить: " + list);
+            Integer el = reader.getInteger();
+            if (el == null || !list.contains(el)) {
+                System.out.println("Некорректный ввод или значение отсутствует!");
+            } else {
+                System.out.println("Введите новое значение: ");
+                Integer newEl = reader.getInteger();
+                if (newEl == null) {
+                    System.out.println("Некорректный ввод");
+                }
+                else {
+                    list.set(list.indexOf(el), newEl);
+                    break;
+                }
+            }
+        }
     }
 }
