@@ -1,5 +1,11 @@
 package homework.task2;
 
+/*
+ * Создать класс Zoo.
+ * В классе создать список, в который записать 8 животных через метод add(index, element).
+ * Вывести список в консоль.
+ * */
+
 import java.util.ArrayList;
 
 public class Zoo {
